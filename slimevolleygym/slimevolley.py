@@ -603,16 +603,24 @@ class Game:
       if result < 0: # baseline agent won
         self.agent_left.emotion = "happy"
         self.agent_right.emotion = "sad"
+
+        self.agent_right_2.emotion = "sad"
+
         self.agent_right.life -= 1
       else:
         self.agent_left.emotion = "sad"
         self.agent_right.emotion = "happy"
+
+        self.agent_right_2.emotion = "sad"
+
         self.agent_left.life -= 1
       return result
 
     # update internal states (the last thing to do)
     self.agent_left.updateState(self.ball, self.agent_right)
     self.agent_right.updateState(self.ball, self.agent_left)
+
+    self.agent_right_2.updateState(self.ball, self.agent_right_2)
 
     return result
   def display(self, canvas):
