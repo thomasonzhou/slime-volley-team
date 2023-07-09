@@ -541,6 +541,10 @@ class Game:
     self.fenceStub = None
     self.agent_left = None
     self.agent_right = None
+
+    # instantiate
+    self.agent_right_2 = None
+
     self.delayScreen = None
     self.np_random = np_random
     self.reset()
@@ -553,12 +557,13 @@ class Game:
     self.ball = Particle(0, REF_W/4, ball_vx, ball_vy, 0.5, c=BALL_COLOR);
     self.agent_left = Agent(-1, -REF_W/4, 1.5, c=AGENT_LEFT_COLOR)
     self.agent_right = Agent(1, REF_W/4, 1.5, c=AGENT_RIGHT_COLOR)
+    self.agent_left.updateState(self.ball, self.agent_right)
+    self.agent_right.updateState(self.ball, self.agent_left)
 
     # New slime
     self.agent_right_2 = Agent(1, REF_W/5, 1.5, c=AGENT_RIGHT_COLOR)
-
-    self.agent_left.updateState(self.ball, self.agent_right)
-    self.agent_right.updateState(self.ball, self.agent_left)
+    self.agent_right_2.updateState(self.ball, self.agent_right_2)
+    
     self.delayScreen = DelayScreen()
   def newMatch(self):
     ball_vx = self.np_random.uniform(low=-20, high=20)
@@ -572,6 +577,8 @@ class Game:
     self.agent_left.update()
     self.agent_right.update()
 
+    self.agent_right_2.update()
+
     if self.delayScreen.status():
       self.ball.applyAcceleration(0, GRAVITY)
       self.ball.limitSpeed(0, MAX_BALL_SPEED)
@@ -581,6 +588,10 @@ class Game:
       self.ball.bounce(self.agent_left)
     if (self.ball.isColliding(self.agent_right)):
       self.ball.bounce(self.agent_right)
+    
+    if (self.ball.isColliding(self.agent_right_2)):
+      self.ball.bounce(self.agent_right_2)
+
     if (self.ball.isColliding(self.fenceStub)):
       self.ball.bounce(self.fenceStub)
 
@@ -593,6 +604,7 @@ class Game:
         self.agent_left.emotion = "happy"
         self.agent_right.emotion = "sad"
         self.agent_right.life -= 1
+        self.agent_right_2.life -= 1
       else:
         self.agent_left.emotion = "sad"
         self.agent_right.emotion = "happy"
@@ -603,6 +615,7 @@ class Game:
     self.agent_left.updateState(self.ball, self.agent_right)
     self.agent_right.updateState(self.ball, self.agent_left)
 
+
     return result
   def display(self, canvas):
     # background color
@@ -611,8 +624,14 @@ class Game:
     canvas = create_canvas(canvas, c=BACKGROUND_COLOR)
     canvas = self.fence.display(canvas)
     canvas = self.fenceStub.display(canvas)
+
+    canvas = self.agent_right_2.display(canvas, self.ball.x, self.ball.y)
+
     canvas = self.agent_left.display(canvas, self.ball.x, self.ball.y)
     canvas = self.agent_right.display(canvas, self.ball.x, self.ball.y)
+
+    
+
     canvas = self.ball.display(canvas)
     canvas = self.ground.display(canvas)
     return canvas
