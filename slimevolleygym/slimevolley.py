@@ -366,6 +366,9 @@ class Agent:
     self.state = RelativeState()
     self.emotion = "happy"; # hehe...
     self.life = MAXLIVES
+
+    self.speedcap_x = PLAYER_SPEED_X
+    self.speedcap_y = PLAYER_SPEED_Y
   def lives(self):
     return self.life
   def setAction(self, action):
@@ -381,11 +384,11 @@ class Agent:
     self.desired_vx = 0
     self.desired_vy = 0
     if (forward and (not backward)):
-      self.desired_vx = -PLAYER_SPEED_X
+      self.desired_vx = -self.speedcap_x
     if (backward and (not forward)):
-      self.desired_vx = PLAYER_SPEED_X
+      self.desired_vx = self.speedcap_x
     if jump:
-      self.desired_vy = PLAYER_SPEED_Y
+      self.desired_vy = self.speedcap_y
   def move(self):
     self.x += self.vx * TIMESTEP
     self.y += self.vy * TIMESTEP
@@ -566,6 +569,12 @@ class Game:
     self.agent_right_2.updateState(self.ball, self.agent_right_2)
     self.agent_left_2 = Agent(-1, -REF_W/5, 1.5, c=AGENT_LEFT_COLOR)
     self.agent_left_2.updateState(self.ball, self.agent_left_2)
+
+    # JUMPER
+    # Higher jump boosts look better but lose more points (1.5)
+    # Lower jump boosts look worse but play very well (1.25)
+    self.agent_right_2.speedcap_y = self.agent_right_2.speedcap_y*1.25
+    self.agent_left_2.speedcap_y = self.agent_left_2.speedcap_y*1.25
     
     self.delayScreen = DelayScreen()
   def newMatch(self):
