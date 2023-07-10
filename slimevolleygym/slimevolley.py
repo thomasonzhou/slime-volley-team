@@ -818,8 +818,9 @@ class SlimeVolleyEnv(gym.Env):
     self.game.agent_left.setAction(otherAction)
     self.game.agent_right.setAction(action) # external agent is agent_right
 
-
-    self.game.agent_right_2.setAction(action2)
+    # sleepy slime
+    if self.game.agent_left_2 is not None:
+      self.game.agent_right_2.setAction(action2)
 
     reward = self.game.step()
 
