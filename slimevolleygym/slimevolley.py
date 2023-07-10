@@ -577,8 +577,8 @@ class Game:
     self.agent_left_2.speedcap_y = self.agent_left_2.speedcap_y*1.25
 
     # libero
-    self.agent_right.speedcap_y = self.agent_right.speedcap_y*0.75
-    self.agent_left.speedcap_y = self.agent_left.speedcap_y*0.75
+    # self.agent_right.speedcap_y = self.agent_right.speedcap_y*0.75
+    # self.agent_left.speedcap_y = self.agent_left.speedcap_y*0.75
     
     self.delayScreen = DelayScreen()
   def newMatch(self):
