@@ -827,13 +827,18 @@ class SlimeVolleyEnv(gym.Env):
     self.game.agent_right.setAction(action) # external agent is agent_right
 
     # sleepy slime
-    if action2 is not None:
-      self.game.agent_right_2.setAction(action2)
-    else:
-      obs2 = self.game.agent_right_2.getObservation()
-      action2 = self.policy.predict(obs2)
-    if otherAction2 is not None:
-      self.game.agent_left_2.setAction(otherAction2)
+    # if action2 is not None:
+      # self.game.agent_right_2.setAction(action2)
+    # else:
+    r_obs2 = self.game.agent_right_2.getObservation()
+    action2 = self.policy.predict(r_obs2)
+    self.game.agent_right_2.setAction(action2)
+
+    
+    # if otherAction2 is not None:
+    obs2 = self.game.agent_left_2.getObservation()
+    otherAction2 = self.policy.predict(obs2)
+    self.game.agent_left_2.setAction(otherAction2)
 
     reward = self.game.step()
 
