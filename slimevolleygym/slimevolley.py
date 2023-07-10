@@ -1072,13 +1072,9 @@ if __name__=="__main__":
     from time import sleep
 
   manualAction = [0, 0, 0] # forward, backward, jump
-  manualAction2 = [0, 0, 0]
   otherManualAction = [0, 0, 0]
-  otherManualAction2 = [0, 0, 0]
   manualMode = False
-  manualMode2 = True
   otherManualMode = False
-  otherManualMode2 = False
 
   # taken from https://github.com/openai/gym/blob/master/gym/envs/box2d/car_racing.py
   def key_press(k, mod):
@@ -1149,7 +1145,7 @@ if __name__=="__main__":
       sleep(0.01)
 
     # make the game go slower for human players to be fair to humans.
-    if (manualMode or manualMode2 or otherManualMode or otherManualMode2):
+    if (manualMode or otherManualMode):
       if PIXEL_MODE:
         sleep(0.01)
       else:
