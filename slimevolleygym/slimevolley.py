@@ -787,7 +787,7 @@ class SlimeVolleyEnv(gym.Env):
     assert (int(n) == n) and (n >= 0) and (n < 6)
     return self.action_table[n]
 
-  def step(self, action, otherAction=None):
+  def step(self, action, otherAction=None, action2=None):
     """
     baseAction is only used if multiagent mode is True
     note: although the action space is multi-binary, float vectors
@@ -803,12 +803,23 @@ class SlimeVolleyEnv(gym.Env):
       obs = self.game.agent_left.getObservation()
       otherAction = self.policy.predict(obs)
 
+    # # print(action2)
+    # # only enable manual if not none
+    # if action2 is None:
+    #   action2 = [0, 0, 0]
+    # else:
+    #   action2 = self.action2
+
     if self.atari_mode:
       action = self.discreteToBox(action)
       otherAction = self.discreteToBox(otherAction)
+      # action2 = self.discreteToBox(action2)
 
     self.game.agent_left.setAction(otherAction)
     self.game.agent_right.setAction(action) # external agent is agent_right
+
+
+    self.game.agent_right_2.setAction(action2)
 
     reward = self.game.step()
 
@@ -1076,12 +1087,6 @@ if __name__=="__main__":
     if k == key.UP:    manualAction[2] = 1
     if (k == key.LEFT or k == key.RIGHT or k == key.UP): manualMode = True
 
-    global manualMode2, manualAction2, otherManualMode2, otherManualAction2
-    # for right 2, controlled by JIL
-    if k == key.J: manualAction2[0] = 1
-    if k == key.L: manualAction2[1] = 1
-    if k == key.I: manualAction2[2] = 1
-
     if k == key.D:     otherManualAction[0] = 1
     if k == key.A:     otherManualAction[1] = 1
     if k == key.W:     otherManualAction[2] = 1
@@ -1092,12 +1097,6 @@ if __name__=="__main__":
     if k == key.LEFT:  manualAction[0] = 0
     if k == key.RIGHT: manualAction[1] = 0
     if k == key.UP:    manualAction[2] = 0
-
-    global manualMode2, manualAction2, otherManualMode2, otherManualAction2
-    # for right 2, controlled by JIL
-    if k == key.J: manualAction2[0] = 0
-    if k == key.L: manualAction2[1] = 0
-    if k == key.I: manualAction2[2] = 0
 
     if k == key.D:     otherManualAction[0] = 0
     if k == key.A:     otherManualAction[1] = 0
