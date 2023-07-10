@@ -40,7 +40,7 @@ if __name__=="__main__":
   otherManualAction = [0, 0, 0]
   otherManualAction2 = [0, 0, 0]
   manualMode = False
-  manualMode2 = True
+  manualMode2 = False
   otherManualMode = False
   otherManualMode2 = False
 
@@ -110,8 +110,8 @@ if __name__=="__main__":
   done = False
 
   while not done:
-    action2 = manualAction2
-    otherAction2 = otherManualAction2
+    action2 = manualAction2 if manualMode2 else None
+    otherAction2 = otherManualAction2 if otherManualMode2 else None
 
     if manualMode: # override with keyboard
       action = manualAction
@@ -127,6 +127,8 @@ if __name__=="__main__":
     if reward > 0 or reward < 0:
       manualMode = False
       otherManualMode = False
+      manualMode2 = False
+      otherManualMode2 = False
 
     total_reward += reward
 

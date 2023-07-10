@@ -607,13 +607,13 @@ class Game:
     if (result != 0):
       self.newMatch() # not reset, but after a point is scored
       if result < 0: # baseline agent won
-        self.agent_left.emotion = "happy"
-        self.agent_right.emotion = "sad"
+        self.agent_left.emotion = self.agent_left_2.emotion = "happy"
+        self.agent_right.emotion = self.agent_right_2.emotion = "sad"
         self.agent_right.life -= 1
         self.agent_right_2.life -= 1
       else:
-        self.agent_left.emotion = "sad"
-        self.agent_right.emotion = "happy"
+        self.agent_left.emotion = self.agent_left_2.emotion = "sad"
+        self.agent_right.emotion = self.agent_right_2.emotion = "happy"
         self.agent_left.life -= 1
         self.agent_left_2.life -= 1
       return result
@@ -621,6 +621,8 @@ class Game:
     # update internal states (the last thing to do)
     self.agent_left.updateState(self.ball, self.agent_right)
     self.agent_right.updateState(self.ball, self.agent_left)
+    self.agent_left_2.updateState(self.ball, self.agent_left_2)
+    self.agent_right_2.updateState(self.ball, self.agent_right_2)
 
 
     return result
@@ -767,6 +769,8 @@ class SlimeVolleyEnv(gym.Env):
     self.ale = self.game.agent_right # for compatibility for some models that need the self.ale.lives() function
 
     self.policy = BaselinePolicy() # the “bad guy”
+    self.policy_r2 = BaselinePolicy()
+    self.policy_l2 = BaselinePolicy()
 
     self.viewer = None
 
@@ -830,14 +834,17 @@ class SlimeVolleyEnv(gym.Env):
     # if action2 is not None:
       # self.game.agent_right_2.setAction(action2)
     # else:
-    r_obs2 = self.game.agent_right_2.getObservation()
-    action2 = self.policy.predict(r_obs2)
+
+    # Use the baseline policy for the second agent
+    if action2 is None:
+      r_obs2 = self.game.agent_right_2.getObservation()
+      action2 = self.policy_r2.predict(r_obs2)
     self.game.agent_right_2.setAction(action2)
 
     
-    # if otherAction2 is not None:
-    obs2 = self.game.agent_left_2.getObservation()
-    otherAction2 = self.policy.predict(obs2)
+    if otherAction2 is None:
+      obs2 = self.game.agent_left_2.getObservation()
+      otherAction2 = self.policy_l2.predict(obs2)
     self.game.agent_left_2.setAction(otherAction2)
 
     reward = self.game.step()
