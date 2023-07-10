@@ -549,6 +549,8 @@ class Game:
     self.agent_right_2 = None
     self.agent_left_2 = None
 
+    self.unbalanced_agents = True
+
     self.delayScreen = None
     self.np_random = np_random
     self.reset()
@@ -570,15 +572,22 @@ class Game:
     self.agent_left_2 = Agent(-1, -REF_W/5, 1.5, c=AGENT_LEFT_COLOR)
     self.agent_left_2.updateState(self.ball, self.agent_left_2)
 
-    # JUMPER
-    # Higher jump boosts look better but lose more points (1.5)
-    # Lower jump boosts look worse but play very well (1.25)
-    self.agent_right_2.speedcap_y = self.agent_right_2.speedcap_y*1.25
-    self.agent_left_2.speedcap_y = self.agent_left_2.speedcap_y*1.25
+    if self.unbalanced_agents == True:
+      # JUMPER
+      # Higher jump boosts look better but lose more points (1.5)
+      # Lower jump boosts look worse but play very well (1.25)
+      self.agent_right_2.speedcap_y = self.agent_right_2.speedcap_y*1.5
+      self.agent_left_2.speedcap_y = self.agent_left_2.speedcap_y*1.5
+      self.agent_right_2.speedcap_x = self.agent_right_2.speedcap_x*0.75
+      self.agent_left_2.speedcap_x = self.agent_left_2.speedcap_x*0.75
 
-    # libero
-    # self.agent_right.speedcap_y = self.agent_right.speedcap_y*0.75
-    # self.agent_left.speedcap_y = self.agent_left.speedcap_y*0.75
+      # libero
+      # Horizontal move speed is very beneficial for defence (1.5)
+      # To increase the chances of scoring a lower factor was used (1.25)
+      self.agent_right.speedcap_x = self.agent_right.speedcap_x*1.25
+      self.agent_left.speedcap_x = self.agent_left.speedcap_x*1.25
+      # self.agent_right.speedcap_y = self.agent_right.speedcap_y*0.75
+      # self.agent_left.speedcap_y = self.agent_left.speedcap_y*0.75
     
     self.delayScreen = DelayScreen()
   def newMatch(self):
