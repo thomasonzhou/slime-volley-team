@@ -63,6 +63,12 @@ if __name__=="__main__":
     if k == key.W:     otherManualAction[2] = 1
     if (k == key.D or k == key.A or k == key.W): otherManualMode = True
 
+    # for left 2, controlled by FTH
+    if k == key.H:     otherManualAction2[0] = 1
+    if k == key.F:     otherManualAction2[1] = 1
+    if k == key.T:     otherManualAction2[2] = 1
+    if (k == key.F or k == key.H or k == key.T): otherManualMode2 = True
+
   def key_release(k, mod):
     global manualMode, manualAction, otherManualMode, otherManualAction, manualMode2, manualAction2, otherManualMode2, otherManualAction2
     if k == key.LEFT:  manualAction[0] = 0
@@ -76,6 +82,11 @@ if __name__=="__main__":
     if k == key.D:     otherManualAction[0] = 0
     if k == key.A:     otherManualAction[1] = 0
     if k == key.W:     otherManualAction[2] = 0
+
+    # for left 2, controlled by FTH
+    if k == key.H:     otherManualAction2[0] = 0
+    if k == key.F:     otherManualAction2[1] = 0
+    if k == key.T:     otherManualAction2[2] = 0
 
   policy = slimevolleygym.BaselinePolicy() # defaults to use RNN Baseline for player
 
@@ -94,11 +105,13 @@ if __name__=="__main__":
   total_reward = 0
   action = np.array([0, 0, 0])
   action2 = np.array([0, 0, 0])
+  otherAction = np.array([0, 0, 0])
 
   done = False
 
   while not done:
     action2 = manualAction2
+    otherAction2 = otherManualAction2
 
     if manualMode: # override with keyboard
       action = manualAction
@@ -107,9 +120,9 @@ if __name__=="__main__":
 
     if otherManualMode:
       otherAction = otherManualAction
-      obs, reward, done, _ = env.step(action, otherAction, action2)
+      obs, reward, done, _ = env.step(action, otherAction, action2, otherAction2)
     else:
-      obs, reward, done, _ = env.step(action, None, action2)
+      obs, reward, done, _ = env.step(action, None, action2, otherAction2)
 
     if reward > 0 or reward < 0:
       manualMode = False

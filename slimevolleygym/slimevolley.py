@@ -544,6 +544,7 @@ class Game:
 
     # instantiate
     self.agent_right_2 = None
+    self.agent_left_2 = None
 
     self.delayScreen = None
     self.np_random = np_random
@@ -563,6 +564,8 @@ class Game:
     # New slime
     self.agent_right_2 = Agent(1, REF_W/5, 1.5, c=AGENT_RIGHT_COLOR)
     self.agent_right_2.updateState(self.ball, self.agent_right_2)
+    self.agent_left_2 = Agent(-1, -REF_W/5, 1.5, c=AGENT_LEFT_COLOR)
+    self.agent_left_2.updateState(self.ball, self.agent_left_2)
     
     self.delayScreen = DelayScreen()
   def newMatch(self):
@@ -578,6 +581,7 @@ class Game:
     self.agent_right.update()
 
     self.agent_right_2.update()
+    self.agent_left_2.update()
 
     if self.delayScreen.status():
       self.ball.applyAcceleration(0, GRAVITY)
@@ -591,6 +595,8 @@ class Game:
     
     if (self.ball.isColliding(self.agent_right_2)):
       self.ball.bounce(self.agent_right_2)
+    if (self.ball.isColliding(self.agent_left_2)):
+      self.ball.bounce(self.agent_left_2)
 
     if (self.ball.isColliding(self.fenceStub)):
       self.ball.bounce(self.fenceStub)
@@ -609,6 +615,7 @@ class Game:
         self.agent_left.emotion = "sad"
         self.agent_right.emotion = "happy"
         self.agent_left.life -= 1
+        self.agent_left_2.life -= 1
       return result
 
     # update internal states (the last thing to do)
@@ -626,6 +633,7 @@ class Game:
     canvas = self.fenceStub.display(canvas)
 
     canvas = self.agent_right_2.display(canvas, self.ball.x, self.ball.y)
+    canvas = self.agent_left_2.display(canvas, self.ball.x, self.ball.y)
 
     canvas = self.agent_left.display(canvas, self.ball.x, self.ball.y)
     canvas = self.agent_right.display(canvas, self.ball.x, self.ball.y)
@@ -787,7 +795,7 @@ class SlimeVolleyEnv(gym.Env):
     assert (int(n) == n) and (n >= 0) and (n < 6)
     return self.action_table[n]
 
-  def step(self, action, otherAction=None, action2=None):
+  def step(self, action, otherAction=None, action2=None, otherAction2=None):
     """
     baseAction is only used if multiagent mode is True
     note: although the action space is multi-binary, float vectors
@@ -821,6 +829,8 @@ class SlimeVolleyEnv(gym.Env):
     # sleepy slime
     if action2 is not None:
       self.game.agent_right_2.setAction(action2)
+    if otherAction2 is not None:
+      self.game.agent_left_2.setAction(otherAction2)
 
     reward = self.game.step()
 
