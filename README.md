@@ -43,7 +43,7 @@ extras_require={
 }
 ```
 
-and then running 
+and then run:
 
 ```
 python setup.py install --user
