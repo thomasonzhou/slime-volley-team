@@ -597,6 +597,23 @@ class Game:
     self.agent_left_2 = Agent(-1, -REF_W/5, 1.5, c=AGENT_LEFT_COLOR)
     self.agent_left_2.updateState(self.ball, self.agent_left_2)
 
+    # manually define relationships
+    self.agent_left.teammate = self.agent_left_2
+    self.agent_left.opponent = self.agent_right
+    self.agent_left.opponent2 = self.agent_right_2
+
+    self.agent_right.teammate = self.agent_right_2
+    self.agent_right.opponent = self.agent_left
+    self.agent_right.opponent2 = self.agent_left_2
+
+    self.agent_left_2.teammate = self.agent_left
+    self.agent_left_2.opponent = self.agent_right
+    self.agent_left_2.opponent2 = self.agent_right_2
+
+    self.agent_right_2.teammate = self.agent_right
+    self.agent_right_2.opponent = self.agent_left
+    self.agent_right_2.opponent2 = self.agent_left_2
+
     if self.unbalanced_agents == True:
       # JUMPER
       # Higher jump boosts look better but lose more points (1.5)
