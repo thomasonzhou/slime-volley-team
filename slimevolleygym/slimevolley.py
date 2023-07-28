@@ -21,6 +21,7 @@ from gym.envs.registration import register
 import numpy as np
 import cv2 # installed with gym anyways
 from collections import deque
+import json
 
 np.set_printoptions(threshold=20, precision=3, suppress=True, linewidth=200)
 
@@ -333,6 +334,13 @@ class RelativeState:
     self.y = 0
     self.vx = 0
     self.vy = 0
+
+    # teammate
+    self.tx = 0
+    self.ty = 0
+    self.tvx = 0
+    self.tvy = 0
+
     # ball
     self.bx = 0
     self.by = 0
@@ -343,10 +351,20 @@ class RelativeState:
     self.oy = 0
     self.ovx = 0
     self.ovy = 0
+
+    # opponent 2
+    self.ox2 = 0
+    self.oy2 = 0
+    self.ovx2 = 0
+    self.ovy2 = 0
+
   def getObservation(self):
     result = [self.x, self.y, self.vx, self.vy,
               self.bx, self.by, self.bvx, self.bvy,
-              self.ox, self.oy, self.ovx, self.ovy]
+              self.tx, self.ty, self.tvx, self.tvy,
+              self.ox, self.oy, self.ovx, self.ovy,
+              self.ox2, self.oy2, self.ovx2, self.ovy2
+              ]
     scaleFactor = 10.0  # scale inputs to be in the order of magnitude of 10 for neural network.
     result = np.array(result) / scaleFactor
     return result
@@ -366,6 +384,10 @@ class Agent:
     self.state = RelativeState()
     self.emotion = "happy"; # hehe...
     self.life = MAXLIVES
+    
+    self.teammate = None
+    self.opponent = None
+    self.opponent2 = None
 
     self.speedcap_x = PLAYER_SPEED_X
     self.speedcap_y = PLAYER_SPEED_Y
@@ -497,7 +519,6 @@ class BaselinePolicy:
        7.6812, -2.4732, 1.738, 0.3781, 0.8718, 2.5886, 1.6911, 1.2953, -9.0052, -4.6038, -6.7447, -2.5528, 0.4391, -4.9278, -3.6695,
        -4.8673, -1.6035, 1.5011, -5.6124, 4.9747, 1.8998, 3.0359, 6.2983, -4.8568, -2.1888, -4.1143, -3.9874, -0.0459, 4.7134, 2.8952,
        -9.3627, -4.685, 0.3601, -1.3699, 9.7294, 11.5596, 0.1918, 3.0783, 0.0329, -0.1362, -0.1188, -0.7579, 0.3278, -0.977, -0.9377])
-
     self.bias = np.array([2.2935,-2.0353,-1.7786,5.4567,-3.6368,3.4996,-0.0685])
 
     # unflatten weight, convert it into 7x15 matrix.
@@ -512,7 +533,11 @@ class BaselinePolicy:
     self.outputState = np.tanh(np.dot(self.weight, self.inputState)+self.bias)
   def _setInputState(self, obs):
     # obs is: (op is opponent). obs is also from perspective of the agent (x values negated for other agent)
-    [x, y, vx, vy, ball_x, ball_y, ball_vx, ball_vy, op_x, op_y, op_vx, op_vy] = obs
+    [x, y, vx, vy, ball_x, ball_y, ball_vx, ball_vy, 
+     team_x, team_y, team_vx, team_vy,
+     op_x, op_y, op_vx, op_vy,
+     op2_x, op2_y, op2_vx, op2_vy
+    ] = obs
     self.inputState[0:self.nGameInput] = np.array([x, y, vx, vy, ball_x, ball_y, ball_vx, ball_vy])
     self.inputState[self.nGameInput:] = self.outputState
   def _getAction(self):
