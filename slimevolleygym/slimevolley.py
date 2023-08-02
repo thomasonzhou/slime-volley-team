@@ -574,7 +574,7 @@ class Game:
     self.agent_right_2 = None
     self.agent_left_2 = None
 
-    self.unbalanced_agents = False
+    self.unbalanced_agents = True
 
     self.delayScreen = None
     self.np_random = np_random
