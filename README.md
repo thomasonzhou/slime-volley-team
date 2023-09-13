@@ -6,6 +6,8 @@ This is a extension of [slimevolleygym by hardmaru](https://github.com/hardmaru/
 
 The aim of this project is to achieve collaborative behaviour between slimes on each team, since the current implementation relies on the same baseline policy for each agent (mirrored across the net).
 
+By: [Thomason Zhou](https://www.thzhou.com) and [Kai Ma](https://k78ma.github.io).
+
 # Installation
 
 This is a working combination of dependencies for test_state.py. 
