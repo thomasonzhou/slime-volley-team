@@ -10,6 +10,7 @@ By: [Thomason Zhou](https://www.thzhou.com) and [Kai Ma](https://k78ma.github.io
 
 # TODO Experiments:
 Environment/rules:
+- [ ] Create environment from config file
 - [ ] Wider environment / slower slimes to make game harder for single slime
 - [ ] Limit team passes/touches (like volleyball max 3)
 - [ ] Limit consecutive touches
