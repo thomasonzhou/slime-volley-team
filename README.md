@@ -8,6 +8,23 @@ The aim of this project is to achieve collaborative behaviour between slimes on 
 
 By: [Thomason Zhou](https://www.thzhou.com) and [Kai Ma](https://k78ma.github.io).
 
+# TODO Experiments:
+Environment/rules:
+- [ ] Wider environment / slower slimes to make game harder for single slime
+- [ ] Limit team passes/touches (like volleyball max 3)
+- [ ] Limit consecutive touches
+- [ ] Limit teammate/opponent observations
+
+Policy:
+- [ ] Run two with the original policy on each side, then have additional ones be running the new policy, then run new policy on two and retrain the new policy again?
+- [ ] We would need to train the second agent on each side at minimum, what are the effects of using the 'single player' trained agent with a newly trained one?
+- [ ] Training one team under a single policy or each slime has its own policy?
+- [ ] Just let it train naively because everyone knows everyone's position?
+
+Implementation:
+- [ ] EvoJAX training speed-up
+
+
 # Installation
 
 This is a working combination of dependencies for test_state.py. 

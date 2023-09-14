@@ -8,6 +8,7 @@ import math
 import numpy as np
 import gym
 import slimevolleygym
+from pyglet.gl import *
 
 np.set_printoptions(threshold=20, precision=3, suppress=True, linewidth=200)
 
