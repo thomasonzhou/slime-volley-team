@@ -946,7 +946,9 @@ class SlimeVolleyEnv(gym.Env):
 
   def reset(self):
     self.init_game_state()
-    return self.getObs()
+    obs = self.getObs()
+    #print("Shape of obs in reset:", obs.shape)
+    return obs
 
   def checkViewer(self):
     # for opengl viewer
@@ -1063,8 +1065,45 @@ class FrameStack(gym.Wrapper):
 #####################
 # helper functions: #
 #####################
+def rollout_2v2(env, policy_right, policy_left, policy_right_2, policy_left_2, render_mode=False):
+  """
+  play one agent vs the other in modified gym-style loop.
+  important: returns the score from perspective of policy_right.
+  """
+  obs_right = env.reset()
+  obs_left = obs_right # same observation at the very beginning for the other agent
 
-def multiagent_rollout(env, policy_right, policy_left, render_mode=False):
+  # Add these lines to print the shapes of obs_right and obs_left
+  #print("Shape of obs_right:", obs_right.shape)
+  #print("Shape of obs_left:", obs_left.shape)
+
+  done = False
+  total_reward = 0
+  t = 0
+
+  while not done:
+
+    action_right = policy_right.predict(obs_right)
+    action_left = policy_left.predict(obs_left)
+
+    action_right_2 = policy_right_2.predict(obs_right)
+    action_left_2 = policy_left_2.predict(obs_left)
+
+    # uses a 2nd (optional) parameter for step to put in the other action
+    # and returns the other observation in the 4th optional "info" param in gym's step()
+    obs_right, reward, done, info = env.step(action_right, action_left, action_right_2, action_left_2)
+    obs_left = info['otherObs']
+
+    total_reward += reward
+    t += 1
+
+    if render_mode:
+      env.render()
+
+  return total_reward, t
+
+
+def rollout_1v1(env, policy_right, policy_left, render_mode=False):
   """
   play one agent vs the other in modified gym-style loop.
   important: returns the score from perspective of policy_right.

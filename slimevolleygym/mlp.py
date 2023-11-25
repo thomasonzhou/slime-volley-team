@@ -24,7 +24,7 @@ games['slimevolley'] = Game(env_name='SlimeVolley',
 )
 
 games['slimevolleylite'] = Game(env_name='SlimeVolley',
-  input_size=12,
+  input_size=20,
   output_size=3,
   time_factor=0,
   layers=[10, 10], # hidden size of 20x20 neurons
@@ -137,7 +137,7 @@ class Model:
     for i in range(len(self.shapes)):
       w_shape = self.shapes[i]
       b_shape = self.shapes[i][1]
-      s_w = np.product(w_shape)
+      s_w = np.prod(w_shape)
       s = s_w + b_shape
       chunk = np.array(model_params[pointer:pointer+s])
       self.weight[i] = chunk[:s_w].reshape(w_shape)

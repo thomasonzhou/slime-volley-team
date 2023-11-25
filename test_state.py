@@ -5,9 +5,11 @@ FPS (no-render): 100000 steps /7.956 seconds. 12.5K/s.
 """
 
 import math
+import json
 import numpy as np
 import gym
 import slimevolleygym
+from slimevolleygym import Model, games
 from pyglet.gl import *
 
 np.set_printoptions(threshold=20, precision=3, suppress=True, linewidth=200)
@@ -89,7 +91,13 @@ if __name__=="__main__":
     if k == key.F:     otherManualAction2[1] = 0
     if k == key.T:     otherManualAction2[2] = 0
 
-  policy = slimevolleygym.BaselinePolicy() # defaults to use RNN Baseline for player
+  policy = Model(slimevolleygym.games['slimevolleylite'])
+  # existing code
+  with open ('ga_multi/ga_00083000.json', 'r') as f:
+      model_params, win_streak = json.load(f)
+
+  policy.set_model_params(model_params)
+  #policy = slimevolleygym.BaselinePolicy() # defaults to use RNN Baseline for player
 
   env = gym.make("SlimeVolley-v0")
   env.seed(np.random.randint(0, 10000))
