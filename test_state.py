@@ -93,7 +93,7 @@ if __name__=="__main__":
 
   policy = Model(slimevolleygym.games['slimevolleylite'])
   # existing code
-  with open ('ga_multi/ga_00083000.json', 'r') as f:
+  with open ('ga_multi/ga_00100000.json', 'r') as f:
       model_params, win_streak = json.load(f)
 
   policy.set_model_params(model_params)

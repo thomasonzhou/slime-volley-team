@@ -29,7 +29,7 @@ np.set_printoptions(threshold=20, precision=3, suppress=True, linewidth=200)
 
 RENDER_MODE = True
 
-REF_W = 24*2
+REF_W = 24*3
 REF_H = REF_W
 REF_U = 1.5 # ground height
 REF_WALL_WIDTH = 1.0 # wall width

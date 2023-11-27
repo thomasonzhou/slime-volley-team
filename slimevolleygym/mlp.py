@@ -94,7 +94,7 @@ class Model:
     for shape in self.shapes:
       self.weight.append(np.zeros(shape=shape))
       self.bias.append(np.zeros(shape=shape[1]))
-      self.param_count += (np.product(shape) + shape[1])
+      self.param_count += (np.prod(shape) + shape[1])
       if self.output_noise[idx]:
         self.param_count += shape[1]
       log_std = np.zeros(shape=shape[1])
