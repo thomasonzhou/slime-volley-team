@@ -30,7 +30,7 @@ logdir = "ga_multi"
 if not os.path.exists(logdir):
   os.makedirs(logdir)
 
-# Create four instances of a feed forward policy we may need later.
+# Create four instances of a feed forward policy.
 policy_left = Model(mlp.games['slimevolleylite'])
 policy_right = Model(mlp.games['slimevolleylite'])
 policy_left_2 = Model(mlp.games['slimevolleylite'])
