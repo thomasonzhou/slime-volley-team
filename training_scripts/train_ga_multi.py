@@ -10,6 +10,7 @@ import slimevolleygym
 import slimevolleygym.mlp as mlp
 from slimevolleygym.mlp import Model
 from slimevolleygym import rollout_2v2 as multi_rollout
+from tqdm import tqdm
 
 # Settings
 random_seed = 612
@@ -26,15 +27,15 @@ def mutate(length, mutation_rate, mutation_sigma):
   return mask * noise
 
 # Log results
-logdir = "ga_multi"
+logdir = "ga_multi_large"
 if not os.path.exists(logdir):
   os.makedirs(logdir)
 
 # Create four instances of a feed forward policy.
-policy_left = Model(mlp.games['slimevolleylite'])
-policy_right = Model(mlp.games['slimevolleylite'])
-policy_left_2 = Model(mlp.games['slimevolleylite'])
-policy_right_2 = Model(mlp.games['slimevolleylite'])
+policy_left = Model(mlp.games['slimevolley'])
+policy_right = Model(mlp.games['slimevolley'])
+policy_left_2 = Model(mlp.games['slimevolley'])
+policy_right_2 = Model(mlp.games['slimevolley'])
 param_count = policy_left.param_count
 print("Number of parameters of the neural net policy:", param_count) # 273 for slimevolleylite
 
@@ -48,7 +49,7 @@ env.seed(random_seed)
 np.random.seed(random_seed)
 
 history = []
-for tournament in range(1, total_tournaments+1):
+for tournament in tqdm(range(1, total_tournaments+1)):
 
   m, n = np.random.choice(population_size, 2, replace=False)
 
@@ -83,9 +84,6 @@ for tournament in range(1, total_tournaments+1):
   if (tournament ) % 100 == 0:
     record_holder = np.argmax(winning_streak)
     record = winning_streak[record_holder]
-    print("tournament:", tournament,
-          "best_winning_streak:", record,
-          "mean_duration", np.mean(history),
-          "stdev:", np.std(history),
-         )
+    with open(os.path.join(logdir, "tournament_info.txt"), 'a') as f:
+      f.write(f"tournament: {tournament}, best_winning_streak: {record}, mean_duration: {np.mean(history)}, stdev: {np.std(history)}\n")
     history = []

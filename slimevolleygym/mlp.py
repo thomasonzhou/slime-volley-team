@@ -13,7 +13,7 @@ Game = namedtuple('Game', ['env_name', 'time_factor', 'input_size', 'output_size
 games = {}
 
 games['slimevolley'] = Game(env_name='SlimeVolley',
-  input_size=12,
+  input_size=20,
   output_size=3,
   time_factor=0,
   layers=[20, 20], # hidden size of 20x20 neurons
@@ -27,7 +27,7 @@ games['slimevolleylite'] = Game(env_name='SlimeVolley',
   input_size=20,
   output_size=3,
   time_factor=0,
-  layers=[10, 10], # hidden size of 20x20 neurons
+  layers=[10, 10], # hidden size of 10x10 neurons
   activation='tanh',
   noise_bias=0.0,
   output_noise=[False, False, False],

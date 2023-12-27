@@ -91,9 +91,9 @@ if __name__=="__main__":
     if k == key.F:     otherManualAction2[1] = 0
     if k == key.T:     otherManualAction2[2] = 0
 
-  policy = Model(slimevolleygym.games['slimevolleylite'])
+  policy = Model(slimevolleygym.games['slimevolley'])
   # existing code
-  with open ('ga_multi/ga_00100000.json', 'r') as f:
+  with open ('ga_multi_large/ga_00360000.json', 'r') as f:
       model_params, win_streak = json.load(f)
 
   policy.set_model_params(model_params)
